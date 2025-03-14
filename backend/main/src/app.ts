@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { Server } from 'http';
 import { logger } from './utils/logger';
+import apiRoutes from './api/routes';
 
 class App {
   public app: express.Application;
@@ -23,6 +24,7 @@ class App {
   private initializeMiddlewares(): void {
     this.app.use(express.json());
     this.app.use(cookieParser());
+    this.app.use('/api', apiRoutes);
   }
 
   private handleGracefulShutdown(server: Server): void {

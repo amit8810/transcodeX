@@ -17,8 +17,8 @@ class AppBootstrapper {
 
   public async start(): Promise<void> {
     try {
+      await this.mongodb.connect();
       this.app.listen(this.port);
-      this.mongodb.connect();
     } catch (error: unknown) {
       if (error instanceof Error) {
         logger.error('Application startup failed: ', error);

@@ -3,7 +3,8 @@ import { logger } from '@src/utils/logger';
 import mongoose, { Mongoose } from 'mongoose';
 
 const mongooseOptions = {
-  serverSelectionTimeoutMS: 5000,
+  serverSelectionTimeoutMS: 30000,
+  connectTimeoutMS: 30000,
 };
 
 export class MONGODB_DATABASE {
@@ -26,7 +27,10 @@ export class MONGODB_DATABASE {
 
   public async connect(): Promise<void> {
     try {
-      const connectionInstance = await mongoose.connect(`${this.uri}/${this.dbName}`, mongooseOptions);
+      const connectionInstance = await mongoose.connect(
+        `${this.uri}/${this.dbName}?retryWrites=true&w=majority`,
+        mongooseOptions,
+      );
       this.mongodb = connectionInstance;
       logger.info('MongoDB connected successfully.');
       logger.info(`DB-Name: ${connectionInstance.connection.name}`);
