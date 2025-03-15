@@ -23,4 +23,28 @@ export class AuthController {
       responseHandler.sendErrorResponse(res, 'Internal Server Error', error);
     }
   }
+
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+      const response = await this.authService.login({ email, password });
+      const { token, user } = response;
+      responseHandler.sendSuccessResponse(res, API_MESSAGES.AUTHENTICATION.LOGIN_SUCCESSFULL, {
+        accessToken: token,
+        user,
+      });
+    } catch (error: any) {
+      responseHandler.sendErrorResponse(res, 'Internal Server Error', error);
+    }
+  }
+
+  async getUserProfile(req: Request, res: Response){
+    try {
+      const email = req.user?.email;
+      const user = await this.authService.getProfile(email!);
+      responseHandler.sendSuccessResponse(res, API_MESSAGES.USER.PROFILE_FETCHED, { user })
+    } catch (error: any) {
+      responseHandler.sendErrorResponse(res, 'Internal Server Error', error)
+    }
+  }
 }

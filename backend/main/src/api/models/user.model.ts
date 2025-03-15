@@ -6,6 +6,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  planId: ObjectId;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -35,6 +36,10 @@ const userSchema = new Schema<IUser>(
       minlength: [6, 'Password must be at least 6 characters'],
       select: false,
     },
+    planId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Plan'
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -45,7 +50,7 @@ const userSchema = new Schema<IUser>(
   },
 );
 
-userSchema.index({ email: 1 });
+// userSchema.index({ email: 1 });
 
 userSchema.pre('save', async function (next) {
   const user = this as IUser;

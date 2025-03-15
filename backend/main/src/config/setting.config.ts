@@ -8,6 +8,10 @@ interface ISetting {
     MONGODB_URI: string;
     DB_NAME: string;
   };
+  jwt: {
+    SECRET: string;
+    EXPIRES_IN: string;
+  };
 }
 
 class Setting {
@@ -22,6 +26,10 @@ class Setting {
       database: {
         MONGODB_URI: this.getString('MONGODB_URI', ''),
         DB_NAME: this.getString('MONGODB_NAME', ''),
+      },
+      jwt: {
+        SECRET: this.getString('JWT_SECRET', 'top-secret-1234'),
+        EXPIRES_IN: this.getString('JWT_EXPIRES_IN', '1h'),
       },
     };
   }
