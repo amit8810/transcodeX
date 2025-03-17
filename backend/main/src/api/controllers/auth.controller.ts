@@ -28,10 +28,11 @@ export class AuthController {
     try {
       const { email, password } = req.body;
       const response = await this.authService.login({ email, password });
-      const { token, user } = response;
+      const { token, user, sessionInfo } = response;
       responseHandler.sendSuccessResponse(res, API_MESSAGES.AUTHENTICATION.LOGIN_SUCCESSFULL, {
         accessToken: token,
         user,
+        sessionInfo
       });
     } catch (error: any) {
       responseHandler.sendErrorResponse(res, 'Internal Server Error', error);

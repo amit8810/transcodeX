@@ -1,6 +1,6 @@
 import mongoose, { Schema, ObjectId } from "mongoose";
 
-export interface IRefreshToken extends Document {
+export interface ISession extends Document {
     _id: ObjectId,
     token: string;
     userId: ObjectId,
@@ -10,7 +10,7 @@ export interface IRefreshToken extends Document {
     revoked: boolean,
 }
 
-const refreshTokenSchema = new Schema<IRefreshToken>(
+const sessionSchema = new Schema<ISession>(
     {
         token: {
             type: String,
@@ -43,4 +43,4 @@ const refreshTokenSchema = new Schema<IRefreshToken>(
     }
 )
 
-export const REFRESH_TOKEN_MODEL = mongoose.model<IRefreshToken>('RefreshToken', refreshTokenSchema);
+export const SESSION_MODEL = mongoose.model<ISession>('Session', sessionSchema);

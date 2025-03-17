@@ -11,24 +11,24 @@ interface JwtPayload {
 
 export class JwtService {
   private secret: string;
-  private expiresIn: number | string;
+  // private expiresIn: number | string;
   private static instance: JwtService | null = null;
 
-  private constructor(secret: string, expiresIn: string) {
+  private constructor(secret: string) {
     this.secret = secret;
-    this.expiresIn = expiresIn;
+    // this.expiresIn = expiresIn;
   }
 
-  public static getInstance(secret: string, expiresIn: string) {
+  public static getInstance(secret: string) {
     if (!JwtService.instance) {
-      JwtService.instance = new JwtService(secret, expiresIn);
+      JwtService.instance = new JwtService(secret);
     }
     return JwtService.instance;
   }
 
-  sign(payload: JwtPayload): string {
+  sign(payload: JwtPayload, expireTime: any): string {
     try {
-      const options: SignOptions = { expiresIn: this.expiresIn as any };
+      const options: SignOptions = { expiresIn: expireTime as any };
       const token = jwt.sign(payload, this.secret as Secret, options);
       logger.info(`JWT signed for user: ${payload.id}`);
       return token;

@@ -11,6 +11,7 @@ interface ISetting {
   jwt: {
     SECRET: string;
     EXPIRES_IN: string;
+    REFRESH_TOKEN_EXPIRES_IN: string,
   };
 }
 
@@ -30,6 +31,7 @@ class Setting {
       jwt: {
         SECRET: this.getString('JWT_SECRET', 'top-secret-1234'),
         EXPIRES_IN: this.getString('JWT_EXPIRES_IN', '1h'),
+        REFRESH_TOKEN_EXPIRES_IN: this.getString('REFRESH_TOKEN_EXPIRES_IN', '7d')
       },
     };
   }

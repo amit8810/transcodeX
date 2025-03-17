@@ -12,7 +12,7 @@ declare module 'express' {
     }
 }
 
-const jwtService = JwtService.getInstance(settings.jwt.SECRET, settings.jwt.EXPIRES_IN);
+const jwtService = JwtService.getInstance(settings.jwt.SECRET);
 
 export class AuthMiddleware {
     public static verifyJwt(req: Request, res: Response, next: NextFunction): void {

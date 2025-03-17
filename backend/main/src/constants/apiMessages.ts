@@ -8,5 +8,6 @@ export const API_MESSAGES = {
   AUTHENTICATION: {
     INVALID_PASSWORD: 'Invalid Password.',
     LOGIN_SUCCESSFULL: 'Login Successfull.',
+    SESSION_CONFLICT: 'You are already logged in on these devices. Please log out from one device first.'
   },
 } as const;
