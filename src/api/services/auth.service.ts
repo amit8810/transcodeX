@@ -5,15 +5,17 @@ import { JwtService } from './jwt.service';
 import { settings } from '@src/config/setting.config';
 import { IUser } from '../models';
 import { PLAN_MODEL } from '../models';
-import { v4 as uuid } from "uuid"
+import { v4 as uuid } from 'uuid';
+import { EmailService } from './email.service';
 
 const jwtService = JwtService.getInstance(settings.jwt.SECRET);
+const emailService = EmailService.getInstance();
 
 export interface IAuthService {
   register(data: any): Promise<any>;
   login(data: any): Promise<any>;
-  getProfile(email: string): Promise<IUser | null>
-
+  removeSessionById(sessionId: string): Promise<void>;
+  getProfile(email: string): Promise<IUser | null>;
 }
 
 export class AuthService implements IAuthService {
@@ -33,10 +35,13 @@ export class AuthService implements IAuthService {
     const userObj = JSON.parse(JSON.stringify(user));
     delete userObj.password;
 
+    // send onboarding email
+    await emailService.sendRegistrationEmail(user);
+
     return userObj;
   }
 
-  async login(data: { email: string, password: string }): Promise<any> {
+  async login(data: { email: string; password: string }): Promise<any> {
     const user = await this.userRepository.findUserByEmail(data.email, true);
     if (!user) {
       throw new NotFoundError(API_MESSAGES.USER.NOT_FOUND_WITH_EMAIL);
@@ -55,7 +60,7 @@ export class AuthService implements IAuthService {
     const userId = user?._id.toString();
     const userSessions = await this.userRepository.getUserActiveSessions(userId);
     if (userSessions && userSessions.length >= plan?.deviceLimit!) {
-      throw new ConflictError(API_MESSAGES.AUTHENTICATION.SESSION_CONFLICT)
+      throw new ConflictError(API_MESSAGES.AUTHENTICATION.SESSION_CONFLICT);
     }
 
     const payload = { id: user?._id, email: user?.email };
@@ -74,14 +79,15 @@ export class AuthService implements IAuthService {
       userId,
       deviceInfo: `Device-${randomID}`,
       expiresAt,
-    }
-    
+    };
+
     const newSession = await this.userRepository.createSession(sessionObj);
 
-
-
-
     return { token: accessToken, user: payload, sessionInfo: newSession };
+  }
+
+  async removeSessionById(sessionId: string) {
+    await this.userRepository.removeSessionById(sessionId);
   }
 
   async getProfile(email: string): Promise<IUser | null> {

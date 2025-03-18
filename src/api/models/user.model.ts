@@ -38,7 +38,8 @@ const userSchema = new Schema<IUser>(
     },
     planId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Plan'
+      ref: 'Plan',
+      required: true,
     },
     isActive: {
       type: Boolean,

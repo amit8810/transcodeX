@@ -1,5 +1,5 @@
 {
-  "name": "main",
+  "name": "transcode-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,14 @@
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "fs": "^0.0.1-security",
     "joi": "^17.13.3",
+    "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
+    "nodemailer": "^6.10.0",
     "uuid": "^11.1.0",
     "winston": "^3.17.0"
   },
@@ -37,9 +41,11 @@
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.22.0",
     "@types/cookie-parser": "^1.4.8",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.0",
     "@types/joi": "^17.2.2",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/nodemailer": "^6.4.17",
     "@typescript-eslint/eslint-plugin": "^8.26.1",
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^9.22.0",
