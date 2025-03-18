@@ -14,10 +14,10 @@ export class AuthController {
 
   async registerUser(req: Request, res: Response) {
     try {
-      const { firstName, lastName, email, password } = req.body;
+      const { firstName, lastName, email, password, planId } = req.body;
       const name = `${firstName} ${lastName}`;
 
-      const user = await this.authService.register({ name, email, password });
+      const user = await this.authService.register({ name, email, password, planId });
       responseHandler.sendCreatedResponse(res, API_MESSAGES.USER.CREATED, user);
     } catch (error: any) {
       responseHandler.sendErrorResponse(res, 'Internal Server Error', error);
@@ -32,20 +32,30 @@ export class AuthController {
       responseHandler.sendSuccessResponse(res, API_MESSAGES.AUTHENTICATION.LOGIN_SUCCESSFULL, {
         accessToken: token,
         user,
-        sessionInfo
+        sessionInfo,
       });
     } catch (error: any) {
       responseHandler.sendErrorResponse(res, 'Internal Server Error', error);
     }
   }
 
-  async getUserProfile(req: Request, res: Response){
+  async getUserProfile(req: Request, res: Response) {
     try {
       const email = req.user?.email;
       const user = await this.authService.getProfile(email!);
-      responseHandler.sendSuccessResponse(res, API_MESSAGES.USER.PROFILE_FETCHED, { user })
+      responseHandler.sendSuccessResponse(res, API_MESSAGES.USER.PROFILE_FETCHED, { user });
     } catch (error: any) {
-      responseHandler.sendErrorResponse(res, 'Internal Server Error', error)
+      responseHandler.sendErrorResponse(res, 'Internal Server Error', error);
+    }
+  }
+
+  async removeSession(req: Request, res: Response) {
+    try {
+      const sessionId = req.params.id;
+      await this.authService.removeSessionById(sessionId);
+      responseHandler.sendSuccessResponse(res, API_MESSAGES.AUTHENTICATION.SESSION_REMOVED, {});
+    } catch (error: any) {
+      responseHandler.sendErrorResponse(res, 'Internal Server Error', error);
     }
   }
 }
