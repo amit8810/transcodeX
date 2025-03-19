@@ -3,6 +3,8 @@ import App from './app';
 import { logger } from './utils/logger';
 import { settings } from './config/setting.config';
 import { MONGODB_DATABASE } from './database/mongodb';
+import { RedisConfig } from './config/redis.config';
+import { Redis } from './core/Redis/Redis';
 
 class AppBootstrapper {
   private app: App;
@@ -18,6 +20,9 @@ class AppBootstrapper {
   public async start(): Promise<void> {
     try {
       await this.mongodb.connect();
+      const redisConfig = RedisConfig.getInstance().getConfig();
+      await Redis.getInstance(redisConfig).connect();
+
       this.app.listen(this.port);
     } catch (error: unknown) {
       if (error instanceof Error) {
